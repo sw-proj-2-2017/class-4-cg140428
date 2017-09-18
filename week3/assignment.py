@@ -4,7 +4,7 @@
 
 import pickle
 
-dbfilename = 'test3_4.dat'
+dbfilename = 'assignment.dat' #assignment_3.dat
 
 
 def readScoreDB():
@@ -54,11 +54,11 @@ def doScoreDB(scdb):
         parse = inputstr.split(" ") # inputstr 값으로 공백을 기준으로 하여 잘라 배열 parse에 저장
         #add 명령
         if parse[0] == 'add':
-            record = {'Name': parse[1], 'Age': parse[2], 'Score': parse[3]} #두번째 단어 -> Name의 value, 세번째 -> Age의 value, 네번째 -> Score의 value로 지정하여 dictionary record로 저장
-            scdb += [record]
-            for p in scdb:
-                p['Age'] = int(p['Age']) #문자형인 Age의 value을 int형으로 변환해준다
-                p['Score'] = int(p['Score'])
+            try:
+                record = {'Name': parse[1], 'Age': int(parse[2]), 'Score': int(parse[3])} #두번째 단어 -> Name의 value, 세번째 -> Age의 value, 네번째 -> Score의 value로 지정하여 dictionary record로 저장
+                scdb += [record]
+            except (ValueError, IndexError):
+                print("add Name Age Score순으로 입력해주세요.")
         #del 명령 추가
         elif parse[0] == 'del':
             try:
@@ -67,21 +67,36 @@ def doScoreDB(scdb):
                     if p['Name'] == parse[1]: #p번째 딕션어리의 Name의 value가 입력 값의 두번째 마디와 같으면
                         scdb.remove(p) #p번째 딕션어리를 삭제한다.
                 #break
-            except IndexError:
-                continue
+            except (ValueError, IndexError):
+                print("del Name순으로 입력해주세요.") #'del 0'과 같이 이름란에 숫자를 입력하면 메세지를 띄우고싶은데
+                                                #숫자를 써도 String으로 받는다 어떻게 해야할까 ㅇㅅㅇ
         elif parse[0] == 'show':
-            sortKey = 'Name' if len(parse) == 1 else parse[1] # 단어가 하나일경우 true:'Name' false: 두번째 단어
-            showScoreDB(scdb, sortKey)
-        #find 명령 추가
-        elif parse[0] == 'find':
             try:
+                sortKey = 'Name' if len(parse) == 1 else parse[1] # 단어가 하나일경우 true:'Name' false: 두번째 단어
+                showScoreDB(scdb, sortKey)
+            except KeyError:
+                print("올바른 show 명령어를 입력해주세요. Name or Age or Score")
+        # #find 명령 추가
+        # elif parse[0] == 'find':
+        #     try:
+        #         for p in scdb:
+        #             if p['Name'] == parse[1]:
+        #                 for i in sorted(p):
+        #                     print(i + "=" + p[i], end=' ')
+        #                 print()
+        #     except IndexError:
+        #         continue
+        # find 명령 추가
+        elif parse[0] == 'find':
+            if len(parse) == 2:
                 for p in scdb:
                     if p['Name'] == parse[1]:
-                        for i in sorted(p):
-                            print(i + "=" + p[i], end=' ')
-                        print()
-            except IndexError:
-                continue
+                        for attr in p:
+                            print(attr + "=" + str(p[attr]), end=' ')  # 주어진 name의 정보 출력
+                        print('')
+            else:
+                print("find Name순으로 입력해주세요.")
+
         #inc 명령 추가
         elif parse[0] == 'inc':
             try:
@@ -94,8 +109,8 @@ def doScoreDB(scdb):
                         # 1 + 1 = 2 / '1' + '1' = 11
                         # '1' + 1 = ? error
                         # 스트링에서 int로 변환 후 연산하기.
-            except IndexError:
-                continue
+            except (IndexError, ValueError):
+                print("inc Name Score순으로 입력해주세요.")
         elif parse[0] == 'quit':
             break
         else:
