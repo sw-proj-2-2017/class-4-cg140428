@@ -3,8 +3,6 @@
 #20171661 이다은
 #factorial 재귀
 
-N = int(input("Enter your number: "))
-
 
 def factorial(N):
     if N <= 1:
@@ -12,4 +10,14 @@ def factorial(N):
     else:
         return N*factorial(N-1)
 
-print(N,"! = ",factorial(N))
+run = True
+
+while run:
+    N = int(input("Enter your number: "))
+    if N >= 0:
+        print(N,"! = ",factorial(N))
+    elif N == -1:
+        run = False
+        print("end")
+    else:
+        N = int(input("Enter positive number: "))
