@@ -9,29 +9,42 @@ import time
 def recurfibo(n):
     if n <= 1:
         return n
-    return recurfibo(n -1) + recurfibo(n - 2)
+    else:
+        return recurfibo(n - 1) + recurfibo(n - 2)
 
 
 #iterative
 def iterfibo(n):
-    fibonum = [0, 1]
-    if n <= 1:
-        return n
-    else:
-        for i in range(0, n - 1):
-            next = fibonum[i] + fibonum[i+1]
-            fibonum.append(next)
-        return fibonum[n]
+    now = 0
+    former = 1
+    formerFormer = 0
+    for i in range(n):
+        formerFormer = former
+        former = now
+        now = former + formerFormer
+    return now
 
 while True:
     num = int(input("Enter a number: "))
     if num == -1:
+        print("end.")
         break
-    time_count = time.time()
+    elif num < -1:
+        continue
+    time_count1 = time.time()
     fibonumber = iterfibo(num)
-    time_count = time.time() - time_count
-    print("IterFibo(%d) = %d, time %.20f" %(num, fibonumber, time_count))
-    time_count = time.time()
+    time_count1 = time.time() - time_count1
+    print("IterFibo(%d) = %d, time %.20f" %(num, fibonumber, time_count1))
+    time_count2 = time.time()
     fibonumber = recurfibo(num)
-    time_count = time.time() - time_count
-    print("RecurFibo(%d) = %d, time %.20f" %(num, fibonumber, time_count))
+    time_count2 = time.time() - time_count2
+    print("RecurFibo(%d) = %d, time %.20f" %(num, fibonumber, time_count2))
+
+    if time_count2 > time_count1:
+        print("Comparison: iterFibo is faster than recursiveFibo.")
+
+    elif time_count1 == time_count2:
+        print("Comparison: Both of functions are same.")
+
+    else:
+        print("Comparison: recursiveFibo is faster than iterFibo.")
