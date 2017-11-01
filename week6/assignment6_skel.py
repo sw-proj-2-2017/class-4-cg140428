@@ -82,11 +82,11 @@ class ScoreDB(QWidget):
         self.setLayout(vbox)
 
         #connect
-        self.addButton.clicked.connect(self.addDB)
-        self.delButton.clicked.connect(self.delDB)
-        self.findButton.clicked.connect(self.findDB)
-        self.incButton.clicked.connect(self.incDB)
-        self.showButton.clicked.connect(self.showDB)
+        addButton.clicked.connect(self.addDB)
+        delButton.clicked.connect(self.delDB)
+        findButton.clicked.connect(self.findDB)
+        incButton.clicked.connect(self.incDB)
+        showButton.clicked.connect(self.showDB)
 
 
         #resize
@@ -185,6 +185,10 @@ class ScoreDB(QWidget):
                 a += attr + "=" + p[attr] + "\t"
             a += "\n"
         self.resultTextEdit.setText(a)
+
+    def closeEvent(self, event):
+
+        self.writeScoreDB()
 
 if __name__ == '__main__':
     
