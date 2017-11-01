@@ -19,6 +19,8 @@ class ScoreDB(QWidget):
         
         
     def initUI(self):
+
+        #labels
         name = QLabel("Name: ")
         age = QLabel("Age: ")
         score = QLabel("Score: ")
@@ -26,6 +28,7 @@ class ScoreDB(QWidget):
         key = QLabel("Key: ")
         result = QLabel("Result: ")
 
+        #lineEdit
         self.nameEdit = QLineEdit()
         self.ageEdit = QLineEdit()
         self.scoreEdit = QLineEdit()
@@ -34,12 +37,14 @@ class ScoreDB(QWidget):
         self.keyCombo.addItems(["Name", "Age", "Score"])
         self.resultTextEdit = QTextEdit()
 
+        #Buttons
         addButton = QPushButton("Add")
         delButton = QPushButton("Del")
         findButton = QPushButton("Find")
         incButton = QPushButton("Inc")
         showButton = QPushButton("show")
 
+        #layout
         hbox = QHBoxLayout()
         hbox2 = QHBoxLayout()
         hbox2.addStretch(1)
@@ -76,13 +81,15 @@ class ScoreDB(QWidget):
 
         self.setLayout(vbox)
 
-        addButton.clicked.connect(self.addDB)
-        delButton.clicked.connect(self.delDB)
-        findButton.clicked.connect(self.findDB)
-        incButton.clicked.connect(self.incDB)
-        showButton.clicked.connect(self.showDB)
+        #connect
+        self.addButton.clicked.connect(self.addDB)
+        self.delButton.clicked.connect(self.delDB)
+        self.findButton.clicked.connect(self.findDB)
+        self.incButton.clicked.connect(self.incDB)
+        self.showButton.clicked.connect(self.showDB)
 
 
+        #resize
         self.setGeometry(300, 300, 500, 250)
         self.setWindowTitle('Assignment6')    
         self.show()
@@ -96,8 +103,9 @@ class ScoreDB(QWidget):
                 self.scoredb += [record]
                 self.showScoreDB()
             except (ValueError, IndexError):
-                print("add Name Age Score순으로 입력해주세요.")
-
+                #값을 안넣었을때는 작동이 안되는데 어떻게 하는지 모르겠다 ㅇㅅㅇ
+                self.resultTextEdit.setText("잘못된 명령입니다.")
+                pass
 
     def delDB(self):
         if self.nameEdit.text():
@@ -106,11 +114,10 @@ class ScoreDB(QWidget):
                 for p in scdb_copy:
                     if p['Name'] == self.nameEdit.text(): #p번째 딕션어리의 Name의 value가 입력 값의 두번째 마디와 같으면
                         self.scoredb.remove(p) #p번째 딕션어리를 삭제한다.
-                #break
                 self.showScoreDB()
             except (ValueError, IndexError):
-                print("del Name순으로 입력해주세요.")
-
+                self.resultTextEdit.setText("잘못된 명령입니다.")
+                pass
 
     def findDB(self):
         if self.nameEdit.text():
@@ -123,8 +130,8 @@ class ScoreDB(QWidget):
                         a += "\n"
                 self.resultTextEdit.setText(a)
             except:
-                print("find Name순으로 입력해주세요.")
-
+                self.resultTextEdit.setText("잘못된 명령입니다.")
+                pass
 
     def incDB(self):
         try:
@@ -139,8 +146,7 @@ class ScoreDB(QWidget):
                     # 스트링에서 int로 변환 후 연산하기.
             self.showScoreDB()
         except (IndexError, ValueError):
-            print("inc Name Score순으로 입력해주세요.")
-
+            pass
 
     def showDB(self):
         self.showScoreDB(self.keyCombo.currentText())
@@ -179,7 +185,7 @@ class ScoreDB(QWidget):
                 a += attr + "=" + p[attr] + "\t"
             a += "\n"
         self.resultTextEdit.setText(a)
-        
+
 if __name__ == '__main__':
     
     app = QApplication(sys.argv)
