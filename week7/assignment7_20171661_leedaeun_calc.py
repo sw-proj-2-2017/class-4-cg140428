@@ -30,24 +30,20 @@ class Calculator(QWidget):
         self.display.setMaxLength(15)
 
         # Digit Buttons
-        self.digitButton = [x for x in range(0, calcNumber + 1)]
+        self.digitButton = [x for x in range(0, 10)]
 
-        for i in range(calcNumber + 1):
+        for i in range(10):
             self.digitButton[i] = Button(str(i), self.buttonClicked)
 
         # . and = Buttons
         self.decButton = Button('.', self.buttonClicked)
         self.eqButton = Button('=', self.buttonClicked)
 
-        operatorList = [
-            '*', '/',
-            '+', '-',
-            '(', ')',
-            'C',
-        ]
-        # Operator Buttons
-        for button in operatorList[:]:
-            self.mulButton = Button(button, self.buttonClicked)
+        button = {'mulButton':'*', 'divButton':'/', 'addButton':'+', 'subButton':'-',
+                  'lparButton':'(', 'rparButton':')', 'clearButton':'C'}
+
+        for key, value in button.items():
+            self.key = Button(str(value), self.buttonClicked)
 
         # Layout
         mainLayout = QGridLayout()
@@ -57,12 +53,12 @@ class Calculator(QWidget):
 
         numLayout = QGridLayout()
 
-        numLayout.addWidget(self.digitButton[0], calcNumber / 3, 0)
-        for i in range(1, calcNumber + 1):
-            numLayout.addWidget(self.digitButton[i], (calcNumber - i) // 3, (i + 2) % 3)
+        numLayout.addWidget(self.digitButton[0], 3, 0)
+        for i in range(1, 10):
+            numLayout.addWidget(self.digitButton[i], (9 - i) // 3, (i + 2) % 3)
 
-        numLayout.addWidget(self.decButton, calcNumber / 3, 1)
-        numLayout.addWidget(self.eqButton, calcNumber / 3, 2)
+        numLayout.addWidget(self.decButton, 3, 1)
+        numLayout.addWidget(self.eqButton, 3, 2)
 
         mainLayout.addLayout(numLayout, 1, 0)
 
@@ -101,9 +97,6 @@ class Calculator(QWidget):
 
 if __name__ == '__main__':
     import sys
-
-
-    calcNumber = int(input("calcNumber = "))
 
     app = QApplication(sys.argv)
     calc = Calculator()
