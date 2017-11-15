@@ -4,8 +4,8 @@ from PyQt5.QtWidgets import QLineEdit, QToolButton
 from PyQt5.QtWidgets import QSizePolicy
 from PyQt5.QtWidgets import QLayout, QGridLayout
 
-from keypad import numPadList, operatorList, constantList, functionList
-import calcFunctions
+from keypad2 import numPadList, operatorList, constantDic, functionDic
+from calcFunctions import *
 
 class Button(QToolButton):
 
@@ -42,8 +42,8 @@ class Calculator(QWidget):
         buttonGroups = {
             'num': {'buttons': numPadList, 'layout': numLayout, 'columns': 3},
             'op': {'buttons': operatorList, 'layout': opLayout, 'columns': 2},
-            'constants': {'buttons': constantList, 'layout': constLayout, 'columns': 1},
-            'functions': {'buttons': functionList, 'layout': funcLayout, 'columns': 1},
+            'constants': {'buttons': constantDic, 'layout': constLayout, 'columns': 1},
+            'functions': {'buttons': functionDic, 'layout': funcLayout, 'columns': 1},
         }
 
         for label in buttonGroups.keys():
@@ -79,9 +79,6 @@ class Calculator(QWidget):
         button = self.sender()
         key = button.text()
 
-        const = {0:'3.141592', 1:'3E+8', 2:'340', 3:'1.5E+8'}
-        func = {0:'factorial', 1:'decToBin', 2:'binToDec', 3:'decToRoman'}
-
         if key == '=':
             try:
                 result = str(eval(self.display.text()))
@@ -90,32 +87,12 @@ class Calculator(QWidget):
             self.display.setText(result)
         elif key == 'C':
             self.display.clear()
-        elif key in constantList[:]:
-            for index, value_ in const.items():
-                if key == constantList[index]:
-                    self.display.setText(self.display.text() + value_)
-        # elif key == functionList[0]:
-        #     n = self.display.text()
-        #     value = calcFunctions.factorial(n)
-        #     self.display.setText(str(value))
-        # elif key == functionList[1]:
-        #     n = self.display.text()
-        #     value = calcFunctions.decToBin(n)
-        #     self.display.setText(str(value))
-        # elif key == functionList[2]:
-        #     n = self.display.text()
-        #     value = calcFunctions.binToDec(n)
-        #     self.display.setText(str(value))
-        # elif key == functionList[3]:
-        #     n = self.display.text()
-        #     value = calcFunctions.decToRoman(n)
-        #     self.display.setText(str(value))
-        elif key in functionList[:]:
-            for index, value_ in func.items():
-                if key == functionList[index]:
-                    n = self.display.text()
-                    value = calcFunctions.value_(n)
-                    self.display.setText(str(value))
+        elif key in constantDic:
+                self.display.setText(self.display.text() + constantDic[key])
+        elif key in functionDic:
+                n = self.display.text()
+                value = functionDic[key](n)
+                self.display.setText(str(value))
         else:
             self.display.setText(self.display.text() + key)
 
